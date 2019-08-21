@@ -21,8 +21,11 @@ services:
             && /go/bin/hey -z 5s http://ubuntu-python:8888 > ubuntu.out
             && sleep 5
             && /go/bin/hey -z 5s http://centos-python:7777 > centos.out
+            && echo '########## ALPINE ###########'
             && cat alpine.out 
+            && echo '########## UBUNTU ###########'
             && cat ubuntu.out
+            && echo '########## CENTOS ###########'
             && cat centos.out"
     depends_on: 
       - "alpine-python"
