@@ -9,13 +9,22 @@ services:
     build: ./ubuntu-python
     ports: 
       - "8888:8888"
+  centos-python:
+    build: ./centos-python
+    ports: 
+      - "7777:7777"
   load-test:
     build: ./load-tester
     command: > 
-            bash -c "/go/bin/hey -c 64 -z 5s http://alpine-python:8000 > alpine.out
-            && /go/bin/hey -c 64 -z 5s http://ubuntu-python:8888 > ubuntu.out
+            bash -c "/go/bin/hey -z 5s http://alpine-python:8000 > alpine.out
+            && sleep 5
+            && /go/bin/hey -z 5s http://ubuntu-python:8888 > ubuntu.out
+            && sleep 5
+            && /go/bin/hey -z 5s http://centos-python:7777 > centos.out
             && cat alpine.out 
-            && cat ubuntu.out"
+            && cat ubuntu.out
+            && cat centos.out"
     depends_on: 
       - "alpine-python"
       - "ubuntu-python"
+      - "centos-python"
