@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  alpine-python:
+    build: ./alpine-python
+    ports: 
+      - "8000:8000"
+  ubuntu-python:
+    build: ./ubuntu-python
+    ports: 
+      - "8888:8888"
+  load-test:
+    build: ./load-tester
+    command: > 
+            bash -c "/go/bin/hey -c 64 -z 5s http://alpine-python:8000 > alpine.out
+            && /go/bin/hey -c 64 -z 5s http://ubuntu-python:8888 > ubuntu.out
+            && cat alpine.out 
+            && cat ubuntu.out"
+    depends_on: 
+      - "alpine-python"
+      - "ubuntu-python"
